@@ -1,76 +1,43 @@
-# ─────────────────────────────────────────────────────────────────────────────
-#  GitHub Pages — Live Preview
-#
-#  Builds the React app with Vite and deploys to:
-#  https://felipeassislara170.github.io/alma.app.oficial/
-#
-#  One-time setup (do this once in the GitHub UI):
-#    Repository → Settings → Pages → Source → "GitHub Actions"
-#
-#  After that, every push to main automatically updates the live preview.
-# ─────────────────────────────────────────────────────────────────────────────
-
+# Simple workflow for deploying static content to GitHub Pages
 name: Deploy static content to Pages
 
 on:
+  # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Allow the workflow to deploy to GitHub Pages
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Only one deployment at a time; don't cancel in-progress deployments
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      # configure-pages provides the correct sub-path for the repo
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-        id: pages
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-        env:
-          # e.g. /alma.app.oficial — Vite uses this as the asset base path
-          VITE_BASE_URL: ${{ steps.pages.outputs.base_path }}
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # Upload the compiled output, not the raw source
-          path: dist
-
+  # Single deploy job since we're just deploying
   deploy:
-    name: Deploy to GitHub Pages
-    needs: build
-    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
+    runs-on: ubuntu-latest
     steps:
-      - name: Deploy
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload entire repository
+          path: '.'
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
