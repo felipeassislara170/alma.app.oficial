@@ -1,0 +1,81 @@
+# ─────────────────────────────────────────────────────────────────────────────
+#  GitHub Pages — Live Preview
+#
+#  Deploys the React landing page to:
+#  https://felipeassislara170.github.io/alma.app.oficial/
+#
+#  One-time setup (do this once in the GitHub UI):
+#    Repository → Settings → Pages → Source → "GitHub Actions"
+#
+#  After that, every push to main automatically updates the live preview.
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: GitHub Pages Preview
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'index.html'
+      - 'vite.config.ts'
+      - 'package.json'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:   # allow manual trigger from the Actions tab
+
+# Allow the workflow to deploy to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only one deployment at a time; skip queued runs but don't cancel in-progress
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # configure-pages tells us the correct base path (/alma.app.oficial/)
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        id: pages
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          VITE_BASE_URL: ${{ steps.pages.outputs.base_path }}
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

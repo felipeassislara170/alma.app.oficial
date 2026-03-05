@@ -2,8 +2,29 @@
 
 Aplicativo de bem-estar mental com meditações guiadas, exercícios de respiração, rastreio de humor e muito mais.
 
+[![Live Preview](https://img.shields.io/badge/👁%20Ver%20ao%20Vivo-GitHub%20Pages-6B46C1?style=for-the-badge)](https://felipeassislara170.github.io/alma.app.oficial/)
 [![iOS Build](https://github.com/felipeassislara170/alma.app.oficial/actions/workflows/ios.yml/badge.svg)](https://github.com/felipeassislara170/alma.app.oficial/actions/workflows/ios.yml)
 [![Android Build](https://github.com/felipeassislara170/alma.app.oficial/actions/workflows/android.yml/badge.svg)](https://github.com/felipeassislara170/alma.app.oficial/actions/workflows/android.yml)
+[![Pages Deploy](https://github.com/felipeassislara170/alma.app.oficial/actions/workflows/pages.yml/badge.svg)](https://github.com/felipeassislara170/alma.app.oficial/actions/workflows/pages.yml)
+
+## 👁 Ver o app ao vivo
+
+**URL:** **https://felipeassislara170.github.io/alma.app.oficial/**
+
+> Abra no celular para ver exatamente como vai parecer no app!
+
+**Ativar uma única vez** (Settings → Pages → Source → **GitHub Actions**):
+
+```
+1. Acesse: github.com/felipeassislara170/alma.app.oficial/settings/pages
+2. Em "Source" selecione: GitHub Actions
+3. Clique Save
+4. Aguarde ~2 minutos → acesse a URL acima
+```
+
+Após isso, **cada push para `main`** atualiza o preview automaticamente em ~2 minutos.
+
+---
 
 > 🚀 **Pronto para publicar?** Leia o **[DEPLOY.md](./DEPLOY.md)** — guia completo para App Store e Google Play, mesmo com MacBook antigo.
 
@@ -11,6 +32,7 @@ Aplicativo de bem-estar mental com meditações guiadas, exercícios de respira�
 |------------|-----------|--------|
 | iOS (SwiftUI) | `AlmaOficial.Alma` | Pronto para App Store |
 | Android (Capacitor) | `AlmaOficial.Alma` | Pronto para Google Play |
+| Landing page | GitHub Pages | [Ver ao vivo ↗](https://felipeassislara170.github.io/alma.app.oficial/) |
 
 ---
 
