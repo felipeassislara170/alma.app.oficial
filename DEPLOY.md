@@ -87,10 +87,13 @@ No GitHub, acesse: **Settings → Secrets and variables → Actions → New repo
 |--------|-------|
 | `APPLE_ID` | seu-email@example.com |
 | `APPLE_APP_SPECIFIC_PASSWORD` | Gere em [appleid.apple.com](https://appleid.apple.com) → Segurança → App-specific passwords |
+| `APPLE_TEAM_ID` | seu Team ID de 10 caracteres (ex: `AB12CD34EF`) — encontre em [developer.apple.com/account](https://developer.apple.com/account) → Membership |
 | `BUILD_CERTIFICATE_BASE64` | base64 do `.p12` (Passo 3) |
 | `BUILD_CERTIFICATE_PASSWORD` | senha do `.p12` |
 | `PROVISION_PROFILE_BASE64` | base64 do `.mobileprovision` (Passo 4) |
 | `KEYCHAIN_PASSWORD` | qualquer senha aleatória, ex: `Alma2025!` |
+
+> **Nota:** Os passos de assinatura e upload são automaticamente ignorados se os secrets não estiverem configurados, permitindo que o workflow execute builds de testes sem credenciais.
 
 ### Passo 6 — Fazer o build via GitHub Actions
 
