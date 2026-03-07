@@ -133,6 +133,11 @@ function Hero() {
 
 /* ─── Interactive Demo ───────────────────────────────────── */
 type ChatMessage = { role: 'user' | 'assistant'; content: string }
+const formatTime = (seconds: number) => {
+  const mins = Math.floor(seconds / 60)
+  const secs = Math.floor(seconds % 60)
+  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+}
 
 function InteractiveDemo() {
   const moods = useMemo(() => ['😔', '😐', '🙂', '😊', '😄'], [])
@@ -163,7 +168,8 @@ function InteractiveDemo() {
   // VITE_* fica visível no bundle; use proxy/backend para chaves sensíveis em produção.
   const aiEndpoint = import.meta.env.VITE_AI_ENDPOINT
   const aiKey = import.meta.env.VITE_AI_KEY
-  const aiEnabled = Boolean(aiEndpoint && aiKey)
+  const hasRealKey = Boolean(aiKey && aiKey !== 'SEU_TOKEN')
+  const aiEnabled = Boolean(aiEndpoint && hasRealKey)
 
   useEffect(() => {
     if (!isMeditating) return
@@ -226,7 +232,7 @@ function InteractiveDemo() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            ...(aiKey ? { Authorization: `Bearer ${aiKey}` } : {}),
+            ...(aiEnabled ? { Authorization: `Bearer ${aiKey}` } : {}),
           },
           body: JSON.stringify({
             message: userMessage.content,
@@ -276,13 +282,11 @@ function InteractiveDemo() {
               <span className="pill pill--primary">{isMeditating ? 'Ao vivo' : 'Pronto'}</span>
             </div>
             <div className="demo-meditation">
-              <div className="demo-meditation__timer">
-                <span>{Math.floor(meditationSeconds / 60)
-                  .toString()
-                  .padStart(2, '0')}</span>
-                <span>:</span>
-                <span>{(meditationSeconds % 60).toString().padStart(2, '0')}</span>
-              </div>
+            <div className="demo-meditation__timer">
+              <span>{formatTime(meditationSeconds).split(':')[0]}</span>
+              <span>:</span>
+              <span>{formatTime(meditationSeconds).split(':')[1]}</span>
+            </div>
               <div className="progress">
                 <div className="progress__bar" style={{ width: `${meditationProgress * 100}%` }} />
               </div>
