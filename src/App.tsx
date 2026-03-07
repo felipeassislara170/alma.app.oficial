@@ -1,5 +1,5 @@
-import './App.css'
 import { useEffect, useMemo, useState } from 'react'
+import './App.css'
 
 function App() {
   return (
@@ -133,6 +133,7 @@ function Hero() {
 
 /* ─── Interactive Demo ───────────────────────────────────── */
 type ChatMessage = { role: 'user' | 'assistant'; content: string }
+const MAX_MEDITATION_SECONDS = 10 * 60
 const formatTime = (seconds: number) => {
   const mins = Math.floor(seconds / 60)
   const secs = Math.floor(seconds % 60)
@@ -165,16 +166,16 @@ function InteractiveDemo() {
   const [aiInput, setAiInput] = useState('')
   const [aiLoading, setAiLoading] = useState(false)
 
-  // VITE_* fica visível no bundle; use proxy/backend para chaves sensíveis em produção.
+  // VITE_* fica visível no bundle (visible in client bundle); use proxy/backend para chaves sensíveis.
   const aiEndpoint = import.meta.env.VITE_AI_ENDPOINT
   const aiKey = import.meta.env.VITE_AI_KEY
-  const hasRealKey = Boolean(aiKey && aiKey !== 'SEU_TOKEN')
+  const hasRealKey = Boolean(aiKey && (aiKey.startsWith('sk-') || aiKey.length > 20))
   const aiEnabled = Boolean(aiEndpoint && hasRealKey)
 
   useEffect(() => {
     if (!isMeditating) return
     const id = setInterval(() => {
-      setMeditationSeconds((prev) => Math.min(prev + 1, 10 * 60))
+      setMeditationSeconds((prev) => Math.min(prev + 1, MAX_MEDITATION_SECONDS))
     }, 1000)
     return () => clearInterval(id)
   }, [isMeditating])
@@ -232,7 +233,7 @@ function InteractiveDemo() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            ...(aiEnabled ? { Authorization: `Bearer ${aiKey}` } : {}),
+            Authorization: `Bearer ${aiKey}`,
           },
           body: JSON.stringify({
             message: userMessage.content,
@@ -257,7 +258,7 @@ function InteractiveDemo() {
   }
 
   const meditationLabel = isMeditating ? 'Encerrar sessão' : 'Iniciar sessão'
-  const meditationProgress = Math.min(meditationSeconds / (10 * 60), 1)
+  const meditationProgress = Math.min(meditationSeconds / MAX_MEDITATION_SECONDS, 1)
   const breathStep = breathSequence[breathStepIndex]
 
   return (
@@ -298,7 +299,9 @@ function InteractiveDemo() {
                   Resetar
                 </button>
               </div>
-              <p className="demo-helper">Dica: deixe rodando 1–2 min para ver o progresso inicial (o timer vai até 10 min).</p>
+              <p className="demo-helper">
+                Dica: deixe rodando 1–2 min para ver o progresso inicial (o timer vai até {Math.round(MAX_MEDITATION_SECONDS / 60)} min).
+              </p>
             </div>
           </div>
 

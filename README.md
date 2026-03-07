@@ -27,7 +27,8 @@ Aplicativo de bem-estar mental com meditações guiadas, exercícios de respira�
   VITE_AI_ENDPOINT=https://sua-api-de-ia
   VITE_AI_KEY=SEU_TOKEN
   ```
-  Depois rode `npm run dev` ou `npm run build && npm run preview`. O coach usa esses valores automaticamente; se não definir, ele roda em modo demonstração. Se alterar o `.env.local`, pare e suba o servidor de novo para o Vite recarregar as variáveis.
+  - Rode `npm run dev` ou `npm run build && npm run preview`. O coach usa esses valores automaticamente; se não definir, ele roda em modo demonstração.
+  - Se alterar o `.env.local`, pare e suba o servidor de novo para o Vite recarregar as variáveis.
   > Segurança: não faça commit do token. Em produção, prefira expor a IA via backend/proxy para não vazar a chave no cliente.
 
 ### Quero testar as funcionalidades em HTML (navegador)
