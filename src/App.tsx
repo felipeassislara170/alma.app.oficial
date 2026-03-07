@@ -160,6 +160,7 @@ function InteractiveDemo() {
   const [aiInput, setAiInput] = useState('')
   const [aiLoading, setAiLoading] = useState(false)
 
+  // VITE_* fica visível no bundle; use proxy/backend para chaves sensíveis em produção.
   const aiEndpoint = import.meta.env.VITE_AI_ENDPOINT
   const aiKey = import.meta.env.VITE_AI_KEY
   const aiEnabled = Boolean(aiEndpoint && aiKey)
