@@ -133,7 +133,7 @@ function Hero() {
 
 /* ─── Interactive Demo ───────────────────────────────────── */
 type ChatMessage = { role: 'user' | 'assistant'; content: string }
-const MAX_MEDITATION_SECONDS = 10 * 60
+const DEMO_MEDITATION_MAX_SECONDS = 10 * 60
 const formatTime = (seconds: number) => {
   const mins = Math.floor(seconds / 60)
   const secs = Math.floor(seconds % 60)
@@ -169,13 +169,13 @@ function InteractiveDemo() {
   // VITE_* fica visível no bundle (visible in client bundle); use proxy/backend para chaves sensíveis.
   const aiEndpoint = import.meta.env.VITE_AI_ENDPOINT
   const aiKey = import.meta.env.VITE_AI_KEY
-  const hasRealKey = Boolean(aiKey && (aiKey.startsWith('sk-') || aiKey.length > 20))
+  const hasRealKey = Boolean(aiKey && !/^(SEU_TOKEN|YOUR_API_KEY)$/i.test(aiKey.trim()))
   const aiEnabled = Boolean(aiEndpoint && hasRealKey)
 
   useEffect(() => {
     if (!isMeditating) return
     const id = setInterval(() => {
-      setMeditationSeconds((prev) => Math.min(prev + 1, MAX_MEDITATION_SECONDS))
+      setMeditationSeconds((prev) => Math.min(prev + 1, DEMO_MEDITATION_MAX_SECONDS))
     }, 1000)
     return () => clearInterval(id)
   }, [isMeditating])
@@ -258,8 +258,9 @@ function InteractiveDemo() {
   }
 
   const meditationLabel = isMeditating ? 'Encerrar sessão' : 'Iniciar sessão'
-  const meditationProgress = Math.min(meditationSeconds / MAX_MEDITATION_SECONDS, 1)
+  const meditationProgress = Math.min(meditationSeconds / DEMO_MEDITATION_MAX_SECONDS, 1)
   const breathStep = breathSequence[breathStepIndex]
+  const formattedTime = formatTime(meditationSeconds).split(':')
 
   return (
     <section id="demo" className="section section--alt">
@@ -284,9 +285,9 @@ function InteractiveDemo() {
             </div>
             <div className="demo-meditation">
             <div className="demo-meditation__timer">
-              <span>{formatTime(meditationSeconds).split(':')[0]}</span>
+              <span>{formattedTime[0]}</span>
               <span>:</span>
-              <span>{formatTime(meditationSeconds).split(':')[1]}</span>
+              <span>{formattedTime[1]}</span>
             </div>
               <div className="progress">
                 <div className="progress__bar" style={{ width: `${meditationProgress * 100}%` }} />
@@ -300,7 +301,7 @@ function InteractiveDemo() {
                 </button>
               </div>
               <p className="demo-helper">
-                Dica: deixe rodando 1–2 min para ver o progresso inicial (o timer vai até {Math.round(MAX_MEDITATION_SECONDS / 60)} min).
+                Dica: deixe rodando 1–2 min para ver o progresso inicial (o timer vai até {Math.round(DEMO_MEDITATION_MAX_SECONDS / 60)} min).
               </p>
             </div>
           </div>
