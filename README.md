@@ -13,6 +13,20 @@ Aplicativo de bem-estar mental com meditações guiadas, exercícios de respira�
 
 > Abra no celular para ver exatamente como vai parecer no app!
 
+### Quero testar as funcionalidades em HTML (navegador)
+- **Preview online (0 esforço):** use o link acima — é o mesmo app rodando em HTML/CSS/JS.
+- **Rodar localmente:**  
+  ```bash
+  npm install
+  npm run dev   # http://localhost:5173
+  ```
+- **Enviar um pacote HTML para QA:**  
+  ```bash
+  npm run build         # gera /dist com HTML estático
+  npm run preview       # opcional: servir o build localmente
+  # compacte a pasta dist/ e compartilhe; basta abrir dist/index.html em qualquer navegador
+  ```
+
 ### Quer ver agora, em 1 minuto?
 - **Web (mais rápido):** clique no link acima ou rode localmente:  
   ```bash
