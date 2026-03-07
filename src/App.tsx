@@ -133,7 +133,8 @@ function Hero() {
 
 /* ─── Interactive Demo ───────────────────────────────────── */
 type ChatMessage = { role: 'user' | 'assistant'; content: string }
-const DEMO_MEDITATION_MAX_SECONDS = 10 * 60
+const MAX_MEDITATION_SECONDS = 10 * 60
+const PLACEHOLDER_KEYS = ['SEU_TOKEN', 'YOUR_API_KEY']
 const formatTime = (seconds: number) => {
   const mins = Math.floor(seconds / 60)
   const secs = Math.floor(seconds % 60)
@@ -166,16 +167,16 @@ function InteractiveDemo() {
   const [aiInput, setAiInput] = useState('')
   const [aiLoading, setAiLoading] = useState(false)
 
-  // VITE_* fica visível no bundle (visible in client bundle); use proxy/backend para chaves sensíveis.
+  // ⚠️ VITE_* fica visível no bundle (visible in client bundle); use proxy/backend para chaves sensíveis.
   const aiEndpoint = import.meta.env.VITE_AI_ENDPOINT
   const aiKey = import.meta.env.VITE_AI_KEY
-  const hasRealKey = Boolean(aiKey && !/^(SEU_TOKEN|YOUR_API_KEY)$/i.test(aiKey.trim()))
+  const hasRealKey = Boolean(aiKey && !PLACEHOLDER_KEYS.includes(aiKey.trim().toUpperCase()))
   const aiEnabled = Boolean(aiEndpoint && hasRealKey)
 
   useEffect(() => {
     if (!isMeditating) return
     const id = setInterval(() => {
-      setMeditationSeconds((prev) => Math.min(prev + 1, DEMO_MEDITATION_MAX_SECONDS))
+      setMeditationSeconds((prev) => Math.min(prev + 1, MAX_MEDITATION_SECONDS))
     }, 1000)
     return () => clearInterval(id)
   }, [isMeditating])
@@ -258,9 +259,10 @@ function InteractiveDemo() {
   }
 
   const meditationLabel = isMeditating ? 'Encerrar sessão' : 'Iniciar sessão'
-  const meditationProgress = Math.min(meditationSeconds / DEMO_MEDITATION_MAX_SECONDS, 1)
+  const meditationProgress = Math.min(meditationSeconds / MAX_MEDITATION_SECONDS, 1)
   const breathStep = breathSequence[breathStepIndex]
   const formattedTime = formatTime(meditationSeconds).split(':')
+  const maxMeditationMinutes = Math.round(MAX_MEDITATION_SECONDS / 60)
 
   return (
     <section id="demo" className="section section--alt">
@@ -301,7 +303,7 @@ function InteractiveDemo() {
                 </button>
               </div>
               <p className="demo-helper">
-                Dica: deixe rodando 1–2 min para ver o progresso inicial (o timer vai até {Math.round(DEMO_MEDITATION_MAX_SECONDS / 60)} min).
+                Dica: deixe rodando 1–2 min para ver o progresso inicial (o timer vai até {maxMeditationMinutes} min).
               </p>
             </div>
           </div>
