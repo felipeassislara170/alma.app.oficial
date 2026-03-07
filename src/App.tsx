@@ -293,7 +293,7 @@ function InteractiveDemo() {
                   Resetar
                 </button>
               </div>
-              <p className="demo-helper">Dica: deixe rodando 30–60s e veja o gráfico preencher.</p>
+              <p className="demo-helper">Dica: deixe rodando 1–2 min para ver o progresso inicial (o timer vai até 10 min).</p>
             </div>
           </div>
 
@@ -364,7 +364,7 @@ function InteractiveDemo() {
                   </span>
                 ))}
               </div>
-              <p className="demo-helper">Use isso como QA: selecione humores diferentes e veja o histórico atualizar.</p>
+              <p className="demo-helper">Para testar, selecione humores diferentes e veja o histórico atualizar.</p>
             </div>
           </div>
 
