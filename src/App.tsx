@@ -1,5 +1,26 @@
 import { useState } from 'react'
 import './App.css'
+import ChatPage from './components/ChatPage'
+
+function App() {
+  const [showChat, setShowChat] = useState(false)
+
+  if (showChat) {
+    return <ChatPage onBack={() => setShowChat(false)} />
+  }
+
+  return (
+    <div className="app">
+      <Navbar onOpenChat={() => setShowChat(true)} />
+      <main>
+        <Hero onOpenChat={() => setShowChat(true)} />
+        <Stats />
+        <Features />
+        <HowItWorks />
+        <Testimonials />
+        <DownloadCTA onOpenChat={() => setShowChat(true)} />
+      </main>
+      <Footer />
 import { AuthProvider } from './contexts/AuthContext'
 import { useAuth } from './contexts/useAuth'
 import { AuthScreen } from './components/AuthScreen'
@@ -106,6 +127,7 @@ function FirebaseSetupBanner() {
 }
 
 /* ─── Navbar ─────────────────────────────────────────────── */
+function Navbar({ onOpenChat }: { onOpenChat: () => void }) {
 function Navbar({ onLogout, onOpenChat }: { onLogout: () => void; onOpenChat: () => void }) {
   return (
     <nav className="navbar">
@@ -132,6 +154,9 @@ function Navbar({ onLogout, onOpenChat }: { onLogout: () => void; onOpenChat: ()
           <li><a href="#saude">Saúde</a></li>
         </ul>
 
+        <button className="btn btn--primary btn--sm" onClick={onOpenChat}>
+          Conversar com Alma
+        </button>
         <div className="navbar__actions">
           <span className="streak-badge">🔥 {STREAK_DAYS} dias</span>
           <button className="btn btn--ghost btn--sm" onClick={onOpenChat} aria-label="Abrir chat">💬 Chat</button>
@@ -142,6 +167,8 @@ function Navbar({ onLogout, onOpenChat }: { onLogout: () => void; onOpenChat: ()
   )
 }
 
+/* ─── Hero ───────────────────────────────────────────────── */
+function Hero({ onOpenChat }: { onOpenChat: () => void }) {
 /* ─── Dashboard Header ───────────────────────────────────── */
 function DashboardHeader() {
   return (
@@ -150,6 +177,23 @@ function DashboardHeader() {
         <span className="dash-circle dash-circle--1" />
         <span className="dash-circle dash-circle--2" />
       </div>
+      <div className="container hero__inner">
+        <div className="hero__text">
+          <span className="badge">✨ Novo — Versão 2.0 disponível</span>
+          <h1 className="hero__title">
+            Cuide da sua <span className="highlight">Alma</span> todos os dias
+          </h1>
+          <p className="hero__subtitle">
+            Meditações guiadas, exercícios de respiração e acompanhamento do
+            bem-estar emocional — tudo em um só lugar, na palma da sua mão.
+          </p>
+          <div className="hero__actions">
+            <button className="btn btn--primary btn--lg" onClick={onOpenChat}>
+              💜 Conversar com Alma
+            </button>
+            <a href="#como-funciona" className="btn btn--ghost btn--lg">
+              ▶ Ver como funciona
+            </a>
       <div className="container dash-header__inner">
         <div className="dash-header__top">
           <div>
@@ -365,6 +409,43 @@ function SaudeSection() {
           </div>
         </div>
 
+/* ─── Download CTA ───────────────────────────────────────── */
+function DownloadCTA({ onOpenChat }: { onOpenChat: () => void }) {
+  return (
+    <section id="download" className="section cta-section">
+      <div className="cta-bg" aria-hidden="true">
+        <span className="cta-circle cta-circle--1" />
+        <span className="cta-circle cta-circle--2" />
+      </div>
+      <div className="container cta-inner">
+        <h2 className="cta-title">Comece sua jornada de bem-estar hoje</h2>
+        <p className="cta-sub">
+          Gratuito para sempre no plano básico. Sem cartão de crédito necessário.
+        </p>
+        <div className="store-buttons">
+          <button className="store-btn" onClick={onOpenChat}>
+            <span style={{ fontSize: '1.5rem' }}>💜</span>
+            <div>
+              <small>Experimente agora</small>
+              <strong>Conversar com Alma</strong>
+            </div>
+          </button>
+          <a href="#" className="store-btn" aria-label="Baixar na App Store">
+            <svg viewBox="0 0 24 24" width="24" fill="currentColor" aria-hidden="true">
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98l-.09.06c-.22.14-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.77M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+            </svg>
+            <div>
+              <small>Disponível na</small>
+              <strong>App Store</strong>
+            </div>
+          </a>
+          <a href="#" className="store-btn" aria-label="Baixar no Google Play">
+            <svg viewBox="0 0 24 24" width="24" fill="currentColor" aria-hidden="true">
+              <path d="M3 20.5v-17c0-.83 1-.83 1.5-.5l15 8.5c.5.28.5 1-.0 1.28l-15 8.5C3.5 21.5 3 21.5 3 20.5M5 6.5v11l9.3-5.5L5 6.5z"/>
+            </svg>
+            <div>
+              <small>Disponível no</small>
+              <strong>Google Play</strong>
         <div className="insights-grid">
           {insightCards.map((card) => (
             <div

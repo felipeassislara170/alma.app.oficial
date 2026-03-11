@@ -1,12 +1,14 @@
 {
   "name": "Alma — Cuide da sua Alma",
   "short_name": "Alma",
+  "description": "Mentora emocional empática com meditações guiadas e bem-estar emocional.",
   "description": "Meditações guiadas, Alma AI e insights de bem-estar para cuidar da sua saúde mental.",
   "icons": [
     {
       "src": "./android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
+      "purpose": "any"
       "purpose": "any maskable"
     },
     {
@@ -29,5 +31,6 @@
   "start_url": ".",
   "scope": ".",
   "lang": "pt-BR",
+  "categories": ["health", "lifestyle"]
   "categories": ["health", "lifestyle", "wellness"]
 }
