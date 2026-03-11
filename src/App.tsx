@@ -1,24 +1,73 @@
+import { useState } from 'react'
 import './App.css'
+import { AuthProvider } from './contexts/AuthContext'
+import { useAuth } from './contexts/useAuth'
+import { AuthScreen } from './components/AuthScreen'
+import { ConsentModal } from './components/ConsentModal'
+import { ChatScreen } from './components/ChatScreen'
 
 const STREAK_DAYS = 7
 
-function App() {
+/* ─── Root wrapper ──────────────────────────────────── */
+function AppShell() {
+  const { user, loading, healthConsent, logout } = useAuth()
+  const [showChat, setShowChat] = useState(false)
+  const [chatInitialMessage, setChatInitialMessage] = useState<string | undefined>()
+
+  // Show consent modal on first login when healthConsent has not been set yet
+  const showConsent = user !== null && healthConsent === null
+
+  if (loading) {
+    return (
+      <div className="app-loading" aria-label="Carregando…">
+        <div className="app-loading__spinner" />
+      </div>
+    )
+  }
+
+  if (!user) {
+    return <AuthScreen />
+  }
+
+  const openChat = (initial?: string) => {
+    setChatInitialMessage(initial)
+    setShowChat(true)
+  }
+
   return (
     <div className="app">
-      <Navbar />
-      <main className="dashboard">
-        <DashboardHeader />
-        <MeditacoesSection />
-        <AlmaAISection />
-        <SaudeSection />
-      </main>
-      <Footer />
+      {showConsent && (
+        <ConsentModal />
+      )}
+
+      {showChat ? (
+        <ChatScreen onClose={() => setShowChat(false)} initialMessage={chatInitialMessage} />
+      ) : (
+        <>
+          <Navbar onLogout={logout} onOpenChat={openChat} />
+          <main className="dashboard">
+            <DashboardHeader />
+            <MeditacoesSection />
+            <AlmaAISection onOpenChat={openChat} />
+            <SaudeSection />
+          </main>
+          <Footer />
+        </>
+      )}
     </div>
   )
 }
 
+function App() {
+  return (
+    <AuthProvider>
+      <AppShell />
+    </AuthProvider>
+  )
+}
+
 /* ─── Navbar ─────────────────────────────────────────────── */
-function Navbar() {
+function Navbar({ onLogout, onOpenChat }: { onLogout: () => void; onOpenChat: () => void }) {
   return (
     <nav className="navbar">
       <div className="container navbar__inner">
@@ -46,7 +95,8 @@ function Navbar() {
 
         <div className="navbar__actions">
           <span className="streak-badge">🔥 {STREAK_DAYS} dias</span>
-          <a href="#" className="btn btn--primary btn--sm">Entrar</a>
+          <button className="btn btn--ghost btn--sm" onClick={onOpenChat} aria-label="Abrir chat">💬 Chat</button>
+          <button className="btn btn--primary btn--sm" onClick={onLogout}>Sair</button>
         </div>
       </div>
     </nav>
@@ -165,7 +215,7 @@ const quickActions = [
   { emoji: '🫁', label: 'Guia de respiração' },
 ]
 
-function AlmaAISection() {
+function AlmaAISection({ onOpenChat }: { onOpenChat: (msg?: string) => void }) {
   return (
     <section id="alma-ai" className="dash-section dash-section--dark">
       <div className="container">
@@ -194,14 +244,16 @@ function AlmaAISection() {
             <p className="ai-card__sub">
               Sua assistente de bem-estar. Conversa em português, sem julgamentos, disponível 24h.
             </p>
-            <button className="btn btn--primary btn--lg">Iniciar conversa →</button>
+            <button className="btn btn--primary btn--lg" onClick={() => onOpenChat()}>
+              Iniciar conversa →
+            </button>
           </div>
         </div>
 
         <h3 className="cards-row-title cards-row-title--light">Como posso te ajudar agora?</h3>
         <div className="quick-actions">
           {quickActions.map((a) => (
-            <button key={a.label} className="quick-action-btn">
+            <button key={a.label} className="quick-action-btn" onClick={() => onOpenChat(a.label)}>
               <span className="quick-action-btn__emoji">{a.emoji}</span>
               <span>{a.label}</span>
             </button>
